@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "126468648812",
+    "firebase_url": "https://tutorly-d069e-default-rtdb.firebaseio.com",
+    "project_id": "tutorly-d069e",
+    "storage_bucket": "tutorly-d069e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126468648812:android:7da25726a8af472d588d49",
+        "android_client_info": {
+          "package_name": "com.example.swapno"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtQcfRZnRyobIqBPXz3yal4n3gMJsX3mU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126468648812:android:30783c891cd296d9588d49",
+        "android_client_info": {
+          "package_name": "com.example.tutorly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtQcfRZnRyobIqBPXz3yal4n3gMJsX3mU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
