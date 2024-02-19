@@ -1,6 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+//import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:swapno/Cart/cartpage.dart';
 
 class Product extends StatelessWidget {
   const Product({super.key});
@@ -38,6 +42,9 @@ class ProductData {
   final String productimage;
   final String productimage1;
   final String productimage2;
+  final String productid;
+
+  final String productcategory;
 
 
   ProductData({
@@ -47,6 +54,7 @@ class ProductData {
     required this.productimage,
     required this.productimage1,
     required this.productimage2,
+    required this.productid, required this.productcategory,
   });
 }
 
@@ -177,10 +185,37 @@ class _ProductPageState extends State<ProductPage> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
-            onPressed: () {
-              // Handle add to cart button click
-            },
-            child: Text('Add to Cart'),
+              onPressed: () {
+                String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+                FirebaseFirestore.instance.collection("Cart").doc(widget.productId + uid!).set({
+                  'Product Name': data?.productname,
+                  'Product Description': data?.productdescription,
+                  'Product Price': data?.productprice,
+                  'Product Image': data?.productimage,
+                  'Product Image1': data?.productimage1,
+                  'Product Image2': data?.productimage2,
+                  'Product Id': data?.productid,
+                  'Product Category': data?.productcategory, // Is 'Product Category' supposed to be the same as 'Product Id'?
+                  'User Id': uid,
+                  'Product Quantity': "1",// Is 'Product Category' supposed to be the same as 'Product Id'?
+                }).then((value) {
+                  // Document added successfully
+                  print('Product added to cart successfully!');
+                }).catchError((error) {
+                  // Error adding document
+                  print('Failed to add product to cart: $error');
+                });
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartPage(),
+                  ),
+                );
+              },
+
+              child: Text('Add to Cart'),
           ),
         ),
 
@@ -238,12 +273,15 @@ class _ProductPageState extends State<ProductPage> {
       String userImage = userData['Product Image'];
       String userImage1 = userData['Product Image1'];
       String userImage2 = userData['Product Image2'];
+      String userProductId = userData['All Product Id'];
+      String userProductCategory = userData['Product Category'];
 
       // print('User Name: $userName');
       // print('User Email: $userEmail');
       // print('User Phone: $userPhone');
 
-      return ProductData(productname: userName, productdescription: userDescription, productprice: userPrice, productimage: userImage,productimage1: userImage1,productimage2: userImage2);
+      return ProductData(productname: userName, productdescription: userDescription, productprice: userPrice, productimage: userImage
+          ,productimage1: userImage1,productimage2: userImage2,productid: userProductId,productcategory: userProductCategory);
     } else {
       print('User not found');
       return null;

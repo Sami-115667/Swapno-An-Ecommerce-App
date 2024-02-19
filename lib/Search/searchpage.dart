@@ -98,72 +98,74 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 1.0,
-                  mainAxisSpacing: 8.0,
-                  mainAxisExtent: 250,
-                ),
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: _searchResults.length,
-                itemBuilder: (context, index) {
-                  var data = _searchResults[index];
-                  double imageAspectRatio = 1.0; // Default aspect ratio
-                  // Check if the image height and width are available in your data
-                  if (data.containsKey('imageHeight') && data.containsKey('imageWidth')) {
-                    imageAspectRatio = data['imageWidth'] / data['imageHeight'];
-                  }
-
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigate to the product details page when tapped
-                      // Replace this with your navigation logic
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(productId: data['All Product Id']),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Card(
-                        child: Container(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  child: Image.network(
-                                    data['Product Image'] ?? '',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${data['Product Name'] ?? ''}\n৳${data['Product Price'] ?? ''}',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              child: SingleChildScrollView(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 8.0,
+                    mainAxisExtent: 250,
+                  ),
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    var data = _searchResults[index];
+                    double imageAspectRatio = 1.0; // Default aspect ratio
+                    // Check if the image height and width are available in your data
+                    if (data.containsKey('imageHeight') && data.containsKey('imageWidth')) {
+                      imageAspectRatio = data['imageWidth'] / data['imageHeight'];
+                    }
+                
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigate to the product details page when tapped
+                        // Replace this with your navigation logic
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductPage(productId: data['All Product Id']),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Card(
+                          child: Container(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    child: Image.network(
+                                      data['Product Image'] ?? '',
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '${data['Product Name'] ?? ''}\n৳${data['Product Price'] ?? ''}',
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],

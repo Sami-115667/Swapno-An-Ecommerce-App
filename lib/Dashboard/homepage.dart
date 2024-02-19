@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Cart/cartpage.dart';
 import '../ProductHandelling/productpage.dart';
 import '../Profile/profilepage.dart';
 import '../Search/searchpage.dart';
@@ -44,9 +45,13 @@ class _HomeState extends State<Home> {
 
 
   void bottomchange(int index) {
-    if (index == 0) {
-      // Navigate to the Home page (if needed)
-      // You can replace this with the appropriate route for your Home page.
+    if (index ==1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CartPage(),
+        ),
+      );
     } else if (index == 2) {
       // Navigate to the Profile page
       Navigator.of(context).push(MaterialPageRoute(
