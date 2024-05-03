@@ -213,6 +213,7 @@ class _SignupState extends State<Signup> {
         'phone': user_phone,
         'password': user_password,
         'id': user.uid,
+        'Image': "",
       });
 
       Map<String,String> userdata={
@@ -221,6 +222,7 @@ class _SignupState extends State<Signup> {
         'phone': user_phone,
         'password': user_password,
         'id': user.uid,
+        'Image': ""
       };
 
       try {
