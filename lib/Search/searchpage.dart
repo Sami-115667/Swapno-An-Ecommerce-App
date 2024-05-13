@@ -35,8 +35,8 @@ class _SearchPageState extends State<SearchPage> {
         _searchResults = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .where((data) =>
-        data['Product Name'].toString().toLowerCase().contains(formattedQuery) ||
-            data['Product Category'].toString().toLowerCase().contains(formattedQuery))
+        data['ProductName'].toString().toLowerCase().contains(formattedQuery) ||
+            data['ProductCategory'].toString().toLowerCase().contains(formattedQuery))
             .toList();
       });
     });
@@ -124,7 +124,7 @@ class _SearchPageState extends State<SearchPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductPage(productId: data['All Product Id']),
+                            builder: (context) => ProductPage(productId: data['AllProductId']),
                           ),
                         );
                       },
@@ -140,7 +140,7 @@ class _SearchPageState extends State<SearchPage> {
                                     width: 100.0,
                                     height: 100.0,
                                     child: Image.network(
-                                      data['Product Image'] ?? '',
+                                      data['ProductImage'] ?? '',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -152,7 +152,7 @@ class _SearchPageState extends State<SearchPage> {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        '${data['Product Name'] ?? ''}\n৳${data['Product Price'] ?? ''}',
+                                        '${data['ProductName'] ?? ''}\n৳${data['ProductPrice'] ?? ''}',
                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                       ),
                                     ),

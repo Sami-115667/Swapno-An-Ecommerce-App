@@ -21,10 +21,19 @@ class _CategoryProductPageState extends State<CategoryProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Category Product",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.purple,
+        actions: [],
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
       body: Container(
 
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('All Products').where('Product Category', isEqualTo: widget.categoryName).snapshots(),
+          stream: FirebaseFirestore.instance.collection('All Products').where('ProductCategory', isEqualTo: widget.categoryName).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgressIndicator();
@@ -79,7 +88,7 @@ class _CategoryProductPageState extends State<CategoryProductPage> {
                                 width: 100.0,
                                 height: 100.0,
                                 child: Image.network(
-                                  data?['Product Image'] ?? '',
+                                  data?['ProductImage'] ?? '',
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -90,7 +99,7 @@ class _CategoryProductPageState extends State<CategoryProductPage> {
                                 padding: EdgeInsets.all(15),
                                 child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text('${data?['Product Name'] ?? ''}\n৳${data?['Product Price'] ?? ''}',
+                                    child: Text('${data?['ProductName'] ?? ''}\n৳${data?['ProductPrice'] ?? ''}',
                                       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)
                                 ),
                               )

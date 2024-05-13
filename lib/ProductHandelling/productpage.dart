@@ -267,14 +267,14 @@ class _ProductPageState extends State<ProductPage> {
     if (userSnapshot.exists) {
       Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
       // Access specific fields from userData
-      String userName = userData['Product Name'];
-      String userPrice = userData['Product Price'];
-      String userDescription = userData['Product Description'];
-      String userImage = userData['Product Image'];
-      String userImage1 = userData['Product Image1'];
-      String userImage2 = userData['Product Image2'];
-      String userProductId = userData['All Product Id'];
-      String userProductCategory = userData['Product Category'];
+      String userName = userData['ProductName'];
+      String userPrice = userData['ProductPrice'];
+      String userDescription = userData['ProductDescription'];
+      String userImage = userData['ProductImage'];
+      String userImage1 = userData['ProductImage1'];
+      String userImage2 = userData['ProductImage2'];
+      String userProductId = userData['AllProductId'];
+      String userProductCategory = userData['ProductCategory'];
 
       // print('User Name: $userName');
       // print('User Email: $userEmail');

@@ -107,10 +107,44 @@ class _HomeState extends State<Home> {
             title: Text("Home",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
             backgroundColor: Colors.purple,
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.settings,color: Colors.white,)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.notifications,color: Colors.white,)),
-              //IconButton(onPressed: () {}, icon: const Icon(Icons.filter_alt)),
+              PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'logout') {
+                    // Handle logout action
+                    // For example, log out the user and navigate to login screen
+                    // Your logout logic goes here
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'logout',
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout),
+                          SizedBox(width: 8),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+              ),
+              IconButton(
+                onPressed: () {
+                  // Handle notifications button press
+                  // For example, show notifications
+                },
+                icon: const Icon(Icons.notifications, color: Colors.white),
+              ),
+              // IconButton(
+              //   onPressed: () {
+              //     // Handle filter button press
+              //   },
+              //   icon: const Icon(Icons.filter_alt),
+              // ),
             ],
+
             iconTheme: IconThemeData(color: Colors.white),
           ),
 
@@ -334,11 +368,11 @@ class _HomeState extends State<Home> {
                           height: 130,
 
                           child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance.collection('Top Products').snapshots(),
+                            stream: FirebaseFirestore.instance
+                                .collection('All Products')
+                                .where('ProductType', isEqualTo: 'Top')
+                                .snapshots(),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return CircularProgressIndicator();
-                              }
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Center(child: CircularProgressIndicator());
                               }
@@ -350,17 +384,25 @@ class _HomeState extends State<Home> {
                               List<String> imageUrls = [];
 
                               for (var document in imageDocuments) {
-                                var imageUrl = document['Image'];
+                                var imageUrl = document['ProductImage'];
                                 imageUrls.add(imageUrl);
                               }
 
                               return Column(
                                 children: [
                                   CarouselSlider(
-                                    items: imageUrls.map((imageUrl) {
+                                    items: imageUrls.asMap().entries.map((entry) {
+                                      final index = entry.key;
+                                      final imageUrl = entry.value;
                                       return GestureDetector(
                                         onTap: () {
-                                          // Handle image click as needed
+                                          final documentId = imageDocuments[index].id;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProductPage(productId: documentId),
+                                            ),
+                                          );
                                           print('Image clicked: $imageUrl');
                                         },
                                         child: Image.network(imageUrl),
@@ -371,46 +413,18 @@ class _HomeState extends State<Home> {
                                       height: 100.0,
                                       autoPlay: true,
                                       autoPlayInterval: Duration(seconds: 3),
-
                                       aspectRatio: 16 / 9,
                                       onPageChanged: (index, reason) {
-                                        // Use the index directly
                                         _currentIndex = index;
-
-                                        //  setState(() { });
-                                        // print('$_currentIndex');
-
                                       },
                                     ),
                                   ),
                                   SizedBox(height: 20),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: List.generate(imageUrls.length, (index) {
-                                  //     return GestureDetector(
-                                  //       onTap: () {
-                                  //         // Handle dot click as needed
-                                  //         print('Dot clicked: $index');
-                                  //         print('$_currentIndex');
-                                  //        // _carouselController.animateToPage(index);
-                                  //       },
-                                  //       child: Container(
-                                  //         width: 8,
-                                  //         height: 8,
-                                  //         margin: EdgeInsets.symmetric(horizontal: 2),
-                                  //         decoration: BoxDecoration(
-                                  //           shape: BoxShape.circle,
-                                  //           color: index == _currentIndex ? Colors.blue : Colors.grey,
-                                  //         ),
-                                  //       ),
-                                  //     );
-                                  //   }),
-                                  // ),
-
                                 ],
                               );
                             },
                           ),
+
                         ),
 
 
@@ -493,7 +507,10 @@ class _HomeState extends State<Home> {
                         width: double.infinity,
                         height: 400,
                         child: StreamBuilder(
-                          stream: FirebaseFirestore.instance.collection('All Products').snapshots(),
+                          stream: FirebaseFirestore.instance
+                              .collection('All Products')
+                              .where('ProductType', isEqualTo: 'Discount')
+                              .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return CircularProgressIndicator();
@@ -549,7 +566,7 @@ class _HomeState extends State<Home> {
                                                 width: 80.0,
                                                 height: 50.0,
                                                 child: Image.network(
-                                                  data?['Product Image'] ?? '',
+                                                  data?['ProductImage'] ?? '',
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -560,7 +577,7 @@ class _HomeState extends State<Home> {
                                                 padding: EdgeInsets.all(15),
                                                 child: Align(
                                                     alignment: Alignment.centerLeft,
-                                                    child: Text('${data?['Product Name'] ?? ''}\n৳${data?['Product Price'] ?? ''}',
+                                                    child: Text('${data?['ProductName'] ?? ''}\n৳${data?['ProductPrice'] ?? ''}',
                                                       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),)
                                                 ),
                                               )
@@ -654,7 +671,7 @@ class _HomeState extends State<Home> {
                                                 width: 100.0,
                                                 height: 100.0,
                                                 child: Image.network(
-                                                  data?['Product Image'] ?? '',
+                                                  data?['ProductImage'] ?? '',
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -665,7 +682,7 @@ class _HomeState extends State<Home> {
                                                 padding: EdgeInsets.all(15),
                                                 child: Align(
                                                     alignment: Alignment.centerLeft,
-                                                    child: Text('${data?['Product Name'] ?? ''}\n৳${data?['Product Price'] ?? ''}',
+                                                    child: Text('${data?['ProductName'] ?? ''}\n৳${data?['ProductPrice'] ?? ''}',
                                                       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)
                                                 ),
                                               )

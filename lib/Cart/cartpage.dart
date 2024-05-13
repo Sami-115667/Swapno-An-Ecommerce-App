@@ -132,8 +132,8 @@ class _CartPageState extends State<CartPage> {
                                           fontSize: 22),
                                     ),
                                     Text(
-                                      '\$${cartData['Product Price'] ?? ''}',
-                                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                                      '\৳${cartData['Product Price'] ?? ''}',
+                                      style: TextStyle(color: Colors.grey, fontSize: 16,fontWeight: FontWeight.bold),
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -224,7 +224,10 @@ class _CartPageState extends State<CartPage> {
                 width: double.infinity,
                 height: 150,
                 child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection('All Products').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('All Products')
+                      .where('ProductType', isEqualTo: 'Suggest')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return CircularProgressIndicator();
@@ -280,7 +283,7 @@ class _CartPageState extends State<CartPage> {
                                         width: 70.0,
                                         height: 40.0,
                                         child: Image.network(
-                                          data?['Product Image'] ?? '',
+                                          data?['ProductImage'] ?? '',
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -291,7 +294,7 @@ class _CartPageState extends State<CartPage> {
                                         padding: EdgeInsets.all(10),
                                         child: Align(
                                             alignment: Alignment.centerLeft,
-                                            child: Text('${data?['Product Name'] ?? ''}\n৳${data?['Product Price'] ?? ''}',
+                                            child: Text('${data?['ProductName'] ?? ''}\n৳${data?['ProductPrice'] ?? ''}',
                                               style: TextStyle(fontWeight: FontWeight.bold,fontSize: 10),)
                                         ),
                                       )

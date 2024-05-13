@@ -14,6 +14,20 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   final uid = FirebaseAuth.instance.currentUser?.uid;
 
+  // void _cancelOrder(String orderId) {
+  //   // Perform cancellation logic here
+  //   // For example, you can update the order status to "Cancelled"
+  //   FirebaseFirestore.instance.collection('Orders').doc(orderId).update({
+  //     'orderstatus': 'Cancelled',
+  //   }).then((_) {
+  //     // Show a confirmation message or handle the cancellation
+  //     print('Order cancelled successfully');
+  //   }).catchError((error) {
+  //     // Handle error if cancellation fails
+  //     print('Error cancelling order: $error');
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -59,10 +73,14 @@ class _OrderPageState extends State<OrderPage> {
                 itemBuilder: (context, index) {
                   // Extract data from each document
                   var orderData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                  String orderId = snapshot.data!.docs[index].id; // Get the order ID
                   String productName = orderData['productnames'];
                   int totalCost = orderData['totalcost'];
                   String status = orderData['orderstatus'];
                   String deliveryAddress = orderData['deliveryAddress'];
+
+                  // Extract orderDateTime if available
+                  Timestamp? orderDateTime = orderData['orderDateTime'] as Timestamp?;
 
                   // Determine the text color based on order status
                   Color statusColor = Colors.black;
@@ -70,8 +88,8 @@ class _OrderPageState extends State<OrderPage> {
                     statusColor = Colors.red;
                   } else if (status == 'Delivered') {
                     statusColor = Colors.green;
-                  } else if (status == 'in progress') {
-                    statusColor = Colors.black;
+                  } else if (status == 'In Progress') {
+                    statusColor = Colors.blue;
                   }
 
                   // Build a widget to display order information
@@ -87,34 +105,93 @@ class _OrderPageState extends State<OrderPage> {
                               children: [
                                 Text(
                                   productName,
-                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                 ),
                                 Text('Delivery Address: $deliveryAddress'),
                                 Text(
                                   'Total Cost: ',
                                   style: TextStyle(fontWeight: FontWeight.normal),
                                 ),
-                                Text('$totalCost Taka', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+                                Text('$totalCost Taka', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
+                                if (orderDateTime != null)
+                                  Text('Order Date: ${orderDateTime.toDate().toString()}', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12),),
                               ],
                             ),
                           ),
                           Text(
                             status,
                             style: TextStyle(
-                              color: statusColor,
-                              fontWeight: FontWeight.bold,fontSize: 14
+                                color: statusColor,
+                                fontWeight: FontWeight.bold,fontSize: 14
                             ),
                           ),
+                          if (status == 'Pending') // Show cancel button only if the order is pending
+                            IconButton(
+                              onPressed: () {
+                                _showCancelConfirmationDialog(context, orderId);
+                              },
+                              icon: Icon(Icons.cancel),
+                            ),
+
                         ],
                       ),
                     ),
                   );
                 },
               );
+
+
             },
           ),
         ),
       ),
     );
   }
+
+
+
+  void _showCancelConfirmationDialog(BuildContext context, String orderId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cancel Order'),
+          content: Text('Are you sure you want to cancel this order?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Dismiss the dialog and return false
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Dismiss the dialog and return true
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    ).then((confirmed) {
+      if (confirmed ?? false) {
+        _cancelOrder(orderId); // Cancel the order if confirmed
+      }
+    });
+  }
+
+  void _cancelOrder(String orderId) {
+    // Perform cancellation logic here
+    // For example, you can update the order status to "Cancelled"
+    FirebaseFirestore.instance.collection('Orders').doc(orderId).update({
+      'orderstatus': 'Cancelled',
+    }).then((_) {
+      // Show a confirmation message or handle the cancellation
+      print('Order cancelled successfully');
+    }).catchError((error) {
+      // Handle error if cancellation fails
+      print('Error cancelling order: $error');
+    });
+  }
+
 }
