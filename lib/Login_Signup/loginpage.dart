@@ -70,113 +70,134 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.purple,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 1.1,
-              height: MediaQuery.of(context).size.height / 1.70,
-              child: Center(
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
+    return WillPopScope(
+      onWillPop: () async {
+        return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Exit App'),
+            content: Text('Are you sure you want to exit the app?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        ) ?? false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.purple,
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.1,
+                height: MediaQuery.of(context).size.height / 1.70,
+                child: Center(
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
 
-                  elevation: 8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 100,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            elevation: 8,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "LOGIN",
-                                style: TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey,
-                                ),
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 100,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 40,),
-                        TextField(
-                          controller: emailcon,
-                          decoration: InputDecoration(
-                            labelText: "Email",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: passwordcon,
-                          decoration: InputDecoration(
-                            labelText: "Password",
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            width: null,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed:_login,
-                          child: _showProgressBar
-                              ? CircularProgressIndicator()
-                              : Text(
-                            "Login",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: null,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupPage(),
+                              elevation: 8,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "LOGIN",
+                                  style: TextStyle(
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey,
                                   ),
-                                );
-                              },
-                              child: Text(
-                                "Create New Account!",
-                                style: TextStyle(
-                                  color: Colors.black,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 40,),
+                          TextField(
+                            controller: emailcon,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: passwordcon,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              width: null,
+                              child: TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed:_login,
+                            child: _showProgressBar
+                                ? CircularProgressIndicator()
+                                : Text(
+                              "Login",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: null,
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SignupPage(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Create New Account!",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

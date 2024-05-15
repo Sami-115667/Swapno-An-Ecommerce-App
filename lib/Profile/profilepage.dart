@@ -223,13 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onPressed: () {},
                                 child: Row(
                                   children: [
-                                    Image.asset(
-                                      'assets/edit.png',
-                                      width: 20,
-                                      height: 20,
-                                    ),
                                     SizedBox(width: 8,),
-                                    Text("Edit Profile"),
+                                    Text("Tap Image to Change"),
                                   ],
                                 ),
                               ),

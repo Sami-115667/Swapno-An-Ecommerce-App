@@ -110,9 +110,14 @@ class _HomeState extends State<Home> {
               PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'logout') {
-                    // Handle logout action
-                    // For example, log out the user and navigate to login screen
-                    // Your logout logic goes here
+                    signOut();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                          (route) => false, // Remove all routes from the stack.
+                    );
                   }
                 },
                 itemBuilder: (BuildContext context) {
@@ -130,13 +135,7 @@ class _HomeState extends State<Home> {
                   ];
                 },
               ),
-              IconButton(
-                onPressed: () {
-                  // Handle notifications button press
-                  // For example, show notifications
-                },
-                icon: const Icon(Icons.notifications, color: Colors.white),
-              ),
+
               // IconButton(
               //   onPressed: () {
               //     // Handle filter button press
